@@ -28,6 +28,10 @@ namespace lab_6.Services
         {
             return _bookRepository.GetAll();
         }
+        public void DeleteBook(int id)
+        {
+            _bookRepository.Delete(id);
+        }
 
     }
 }
