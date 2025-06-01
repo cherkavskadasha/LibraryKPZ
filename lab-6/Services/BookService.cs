@@ -11,14 +11,36 @@ namespace lab_6.Services
 {
     public class BookService
     {
-        private readonly BookRepository _bookRepo = new BookRepository();
+        private readonly BookRepository _bookRepository;
+
+        public BookService()
+        {
+            _bookRepository = new BookRepository();
+        }
 
         public void AddBook(string title, string author)
         {
             var book = new Book { Title = title, Author = author };
-            _bookRepo.Add(book);
+            _bookRepository.Add(book);
         }
 
-        public List<Book> GetAllBooks() => _bookRepo.GetAll();
+        public List<Book> GetAllBooks()
+        {
+            return _bookRepository.GetAll();
+        }
+        public void DeleteBook(int id)
+        {
+            _bookRepository.Delete(id);
+        }
+        public List<Book> SearchBooks(string searchTerm)
+        {
+            var books = _bookRepository.GetAll();
+            searchTerm = searchTerm?.ToLower() ?? "";
+            return books.Where(b =>
+                b.Title.ToLower().Contains(searchTerm) ||
+                b.Author.ToLower().Contains(searchTerm)).ToList();
+        }
+
     }
 }
+
