@@ -32,6 +32,14 @@ namespace lab_6.Services
         {
             _bookRepository.Delete(id);
         }
+        public List<Book> SearchBooks(string searchTerm)
+        {
+            var books = _bookRepository.GetAll();
+            searchTerm = searchTerm?.ToLower() ?? "";
+            return books.Where(b =>
+                b.Title.ToLower().Contains(searchTerm) ||
+                b.Author.ToLower().Contains(searchTerm)).ToList();
+        }
 
     }
 }

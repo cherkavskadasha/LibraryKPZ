@@ -31,6 +31,12 @@ namespace lab_6.Services
         {
             _userRepository.Delete(id);
         }
+        public List<User> SearchUsers(string searchTerm)
+        {
+            var users = _userRepository.GetAll();
+            searchTerm = searchTerm?.ToLower() ?? "";
+            return users.Where(u => u.Name.ToLower().Contains(searchTerm)).ToList();
+        }
 
     }
 }

@@ -31,6 +31,8 @@ namespace lab_6
                 Console.WriteLine("6. Список виданих книг");
                 Console.WriteLine("7. Видалити книгу");
                 Console.WriteLine("8. Видалити користувача");
+                Console.WriteLine("9. Пошук книг");
+                Console.WriteLine("10. Пошук користувачів");
                 Console.WriteLine("0. Вихід");
                 Console.Write("Оберіть опцію: ");
                 var choice = Console.ReadLine();
@@ -93,6 +95,35 @@ namespace lab_6
                         else
                         {
                             Console.WriteLine("Невірний формат ID.");
+                        }
+                        break;
+                    case "9":
+                        Console.Write("Введіть текст для пошуку книг (назва або автор): ");
+                        var bookSearch = Console.ReadLine();
+                        var foundBooks = bookService.SearchBooks(bookSearch);
+                        if (foundBooks.Any())
+                        {
+                            foreach (var book in foundBooks)
+                                Console.WriteLine($"[{book.Id}] {book.Title} - {book.Author}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Книги не знайдено.");
+                        }
+                        break;
+
+                    case "10":
+                        Console.Write("Введіть текст для пошуку користувачів (ім'я): ");
+                        var userSearch = Console.ReadLine();
+                        var foundUsers = userService.SearchUsers(userSearch);
+                        if (foundUsers.Any())
+                        {
+                            foreach (var user in foundUsers)
+                                Console.WriteLine($"[{user.Id}] {user.Name}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Користувачів не знайдено.");
                         }
                         break;
                     case "0":
