@@ -33,9 +33,11 @@ namespace lab_6
                 Console.WriteLine("8. Видалити користувача");
                 Console.WriteLine("9. Пошук книг");
                 Console.WriteLine("10. Пошук користувачів");
+                Console.WriteLine("11. Показати деталі книги");
                 Console.WriteLine("0. Вихід");
                 Console.Write("Оберіть опцію: ");
                 var choice = Console.ReadLine();
+                int bookId;
 
                 switch (choice)
                 {
@@ -44,7 +46,13 @@ namespace lab_6
                         var title = Console.ReadLine();
                         Console.Write("Автор: ");
                         var author = Console.ReadLine();
-                        bookService.AddBook(title, author);
+                        Console.Write("Рік видання: ");
+                        if (!int.TryParse(Console.ReadLine(), out int year))
+                        {
+                            Console.WriteLine("Некоректний рік. Спробуйте ще раз.");
+                            break;
+                        }
+                        bookService.AddBook(title, author, year);
                         break;
                     case "2":
                         var books = bookService.GetAllBooks();
@@ -61,11 +69,13 @@ namespace lab_6
                         foreach (var user in users)
                             Console.WriteLine($"[{user.Id}] {user.Name}");
                         break;
-                    case "5":
+                    case "5": 
                         Console.Write("ID користувача: ");
                         int userId = int.Parse(Console.ReadLine());
+
                         Console.Write("ID книги: ");
-                        int bookId = int.Parse(Console.ReadLine());
+                        bookId = int.Parse(Console.ReadLine());
+
                         loanService.LoanBook(userId, bookId);
                         break;
                     case "6":
@@ -124,6 +134,27 @@ namespace lab_6
                         else
                         {
                             Console.WriteLine("Користувачів не знайдено.");
+                        }
+                        break;
+                    case "11": 
+                        Console.Write("Введіть ID книги для перегляду деталей: ");
+                        if (!int.TryParse(Console.ReadLine(), out bookId))
+                        {
+                            Console.WriteLine("Некоректний ID.");
+                            break;
+                        }
+                        var bookDetails = bookService.GetAllBooks().FirstOrDefault(b => b.Id == bookId);
+                        if (bookDetails == null)
+                        {
+                            Console.WriteLine("Книга не знайдена.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"ID: {bookDetails.Id}");
+                            Console.WriteLine($"Назва: {bookDetails.Title}");
+                            Console.WriteLine($"Автор: {bookDetails.Author}");
+                            Console.WriteLine($"Рік видання: {bookDetails.Year}");
+                            Console.WriteLine($"Статус: {(bookDetails.IsAvailable ? "Доступна" : "Позичена")}");
                         }
                         break;
                     case "0":
