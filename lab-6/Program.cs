@@ -29,6 +29,7 @@ namespace lab_6
                 Console.WriteLine("4. Список користувачів");
                 Console.WriteLine("5. Видати книгу");
                 Console.WriteLine("6. Список виданих книг");
+                Console.WriteLine("8. Видалити користувача");
                 Console.WriteLine("0. Вихід");
                 Console.Write("Оберіть опцію: ");
                 var choice = Console.ReadLine();
@@ -68,6 +69,18 @@ namespace lab_6
                         var loans = loanService.GetAllLoans();
                         foreach (var loan in loans)
                             Console.WriteLine($"Користувач {loan.UserId} → Книга {loan.BookId} (дата: {loan.Date.ToShortDateString()})");
+                        break;
+                    case "8":
+                        Console.Write("ID користувача для видалення: ");
+                        if (int.TryParse(Console.ReadLine(), out int deleteUserId))
+                        {
+                            userService.DeleteUser(deleteUserId);
+                            Console.WriteLine("Користувача видалено.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Невірний формат ID.");
+                        }
                         break;
                     case "0":
                         return;

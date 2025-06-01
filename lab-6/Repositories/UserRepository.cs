@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using lab_6.Models;
 using lab_6.Utils;
+
 namespace lab_6.Repositories
 {
     public class UserRepository
@@ -21,6 +22,16 @@ namespace lab_6.Repositories
             user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
             users.Add(user);
             SaveAll(users);
+        }
+        public void Delete(int id)
+        {
+            var users = GetAll();
+            var userToRemove = users.FirstOrDefault(u => u.Id == id);
+            if (userToRemove != null)
+            {
+                users.Remove(userToRemove);
+                SaveAll(users);
+            }
         }
     }
 }

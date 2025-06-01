@@ -11,14 +11,24 @@ namespace lab_6.Services
 {
     public class BookService
     {
-        private readonly BookRepository _bookRepo = new BookRepository();
+        private readonly BookRepository _bookRepository;
+
+        public BookService()
+        {
+            _bookRepository = new BookRepository();
+        }
 
         public void AddBook(string title, string author)
         {
             var book = new Book { Title = title, Author = author };
-            _bookRepo.Add(book);
+            _bookRepository.Add(book);
         }
 
-        public List<Book> GetAllBooks() => _bookRepo.GetAll();
+        public List<Book> GetAllBooks()
+        {
+            return _bookRepository.GetAll();
+        }
+
     }
 }
+
