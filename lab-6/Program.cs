@@ -29,9 +29,15 @@ namespace lab_6
                 Console.WriteLine("4. Список користувачів");
                 Console.WriteLine("5. Видати книгу");
                 Console.WriteLine("6. Список виданих книг");
+                Console.WriteLine("7. Видалити книгу");
+                Console.WriteLine("8. Видалити користувача");
+                Console.WriteLine("9. Пошук книг");
+                Console.WriteLine("10. Пошук користувачів");
+                Console.WriteLine("11. Показати деталі книги");
                 Console.WriteLine("0. Вихід");
                 Console.Write("Оберіть опцію: ");
                 var choice = Console.ReadLine();
+                int bookId;
 
                 switch (choice)
                 {
@@ -40,7 +46,13 @@ namespace lab_6
                         var title = Console.ReadLine();
                         Console.Write("Автор: ");
                         var author = Console.ReadLine();
-                        bookService.AddBook(title, author);
+                        Console.Write("Рік видання: ");
+                        if (!int.TryParse(Console.ReadLine(), out int year))
+                        {
+                            Console.WriteLine("Некоректний рік. Спробуйте ще раз.");
+                            break;
+                        }
+                        bookService.AddBook(title, author, year);
                         break;
                     case "2":
                         var books = bookService.GetAllBooks();
@@ -57,17 +69,93 @@ namespace lab_6
                         foreach (var user in users)
                             Console.WriteLine($"[{user.Id}] {user.Name}");
                         break;
-                    case "5":
+                    case "5": 
                         Console.Write("ID користувача: ");
                         int userId = int.Parse(Console.ReadLine());
+
                         Console.Write("ID книги: ");
-                        int bookId = int.Parse(Console.ReadLine());
+                        bookId = int.Parse(Console.ReadLine());
+
                         loanService.LoanBook(userId, bookId);
                         break;
                     case "6":
                         var loans = loanService.GetAllLoans();
                         foreach (var loan in loans)
                             Console.WriteLine($"Користувач {loan.UserId} → Книга {loan.BookId} (дата: {loan.Date.ToShortDateString()})");
+                        break;
+                    case "7":
+                        Console.Write("Введіть ID книги для видалення: ");
+                        if (int.TryParse(Console.ReadLine(), out int bookIdToDelete))
+                        {
+                            bookService.DeleteBook(bookIdToDelete);
+                            Console.WriteLine("Книгу видалено.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Невірний ID.");
+                        }
+                        break;
+                    case "8":
+                        Console.Write("ID користувача для видалення: ");
+                        if (int.TryParse(Console.ReadLine(), out int deleteUserId))
+                        {
+                            userService.DeleteUser(deleteUserId);
+                            Console.WriteLine("Користувача видалено.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Невірний формат ID.");
+                        }
+                        break;
+                    case "9":
+                        Console.Write("Введіть текст для пошуку книг (назва або автор): ");
+                        var bookSearch = Console.ReadLine();
+                        var foundBooks = bookService.SearchBooks(bookSearch);
+                        if (foundBooks.Any())
+                        {
+                            foreach (var book in foundBooks)
+                                Console.WriteLine($"[{book.Id}] {book.Title} - {book.Author}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Книги не знайдено.");
+                        }
+                        break;
+
+                    case "10":
+                        Console.Write("Введіть текст для пошуку користувачів (ім'я): ");
+                        var userSearch = Console.ReadLine();
+                        var foundUsers = userService.SearchUsers(userSearch);
+                        if (foundUsers.Any())
+                        {
+                            foreach (var user in foundUsers)
+                                Console.WriteLine($"[{user.Id}] {user.Name}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Користувачів не знайдено.");
+                        }
+                        break;
+                    case "11": 
+                        Console.Write("Введіть ID книги для перегляду деталей: ");
+                        if (!int.TryParse(Console.ReadLine(), out bookId))
+                        {
+                            Console.WriteLine("Некоректний ID.");
+                            break;
+                        }
+                        var bookDetails = bookService.GetAllBooks().FirstOrDefault(b => b.Id == bookId);
+                        if (bookDetails == null)
+                        {
+                            Console.WriteLine("Книга не знайдена.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"ID: {bookDetails.Id}");
+                            Console.WriteLine($"Назва: {bookDetails.Title}");
+                            Console.WriteLine($"Автор: {bookDetails.Author}");
+                            Console.WriteLine($"Рік видання: {bookDetails.Year}");
+                            Console.WriteLine($"Статус: {(bookDetails.IsAvailable ? "Доступна" : "Позичена")}");
+                        }
                         break;
                     case "0":
                         return;

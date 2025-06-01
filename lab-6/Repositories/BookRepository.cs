@@ -25,5 +25,15 @@ namespace lab_6.Repositories
             books.Add(book);
             SaveAll(books);
         }
+        public void Delete(int id)
+        {
+            var books = GetAll();
+            var bookToRemove = books.FirstOrDefault(b => b.Id == id);
+            if (bookToRemove != null)
+            {
+                books.Remove(bookToRemove);
+                SaveAll(books);
+            }
+        }
     }
 }
