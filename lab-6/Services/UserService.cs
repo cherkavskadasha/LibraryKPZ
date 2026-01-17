@@ -10,14 +10,28 @@ namespace lab_6.Services
 {
     public class UserService
     {
-        private readonly UserRepository _userRepo = new UserRepository();
+        private readonly UserRepository _userRepository;
+
+        public UserService()
+        {
+            _userRepository = new UserRepository();
+        }
 
         public void AddUser(string name)
         {
             var user = new User { Name = name };
-            _userRepo.Add(user);
+            _userRepository.Add(user);
         }
 
-        public List<User> GetAllUsers() => _userRepo.GetAll();
+        public List<User> GetAllUsers()
+        {
+            return _userRepository.GetAll();
+        }
+        public void DeleteUser(int id)
+        {
+            _userRepository.Delete(id);
+        }
+
     }
 }
+
